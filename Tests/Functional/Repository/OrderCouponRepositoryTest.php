@@ -12,14 +12,14 @@
  * @version ##version_placeholder##
  */
 
-namespace Elcodi\CartCouponBundle\Tests\Functional\Factory;
+namespace Elcodi\CartCouponBundle\Tests\Functional\Repository;
 
 use Elcodi\CoreBundle\Tests\WebTestCase;
 
 /**
- * Class OrderCouponFactoryTest
+ * Class OrderCouponRepositoryTest
  */
-class OrderCouponFactoryTest extends WebTestCase
+class OrderCouponRepositoryTest extends WebTestCase
 {
     /**
      * Returns the callable name of the service
@@ -29,30 +29,30 @@ class OrderCouponFactoryTest extends WebTestCase
     public function getServiceCallableName()
     {
         return [
-            'elcodi.core.cart_coupon.factory.order_coupon',
-            'elcodi.factory.order_coupon',
+            'elcodi.core.cart_coupon.repository.order_coupon',
+            'elcodi.repository.order_coupon',
         ];
     }
 
     /**
-     * Test order_coupon factory provider
+     * Test order_coupon repository provider
      */
     public function testFactoryProvider()
     {
         $this->assertInstanceOf(
-            $this->container->getParameter('elcodi.core.cart_coupon.entity.order_coupon.class'),
-            $this->container->get('elcodi.core.cart_coupon.entity.order_coupon.instance')
+            $this->container->getParameter('elcodi.core.cart_coupon.repository.order_coupon.class'),
+            $this->container->get('elcodi.core.cart_coupon.repository.order_coupon')
         );
     }
 
     /**
-     * Test order_coupon factory provider alias
+     * Test order_coupon repository provider alias
      */
     public function testFactoryProviderAlias()
     {
         $this->assertInstanceOf(
-            $this->container->getParameter('elcodi.core.cart_coupon.entity.order_coupon.class'),
-            $this->container->get('elcodi.entity.order_coupon.instance')
+            $this->container->getParameter('elcodi.core.cart_coupon.repository.order_coupon.class'),
+            $this->container->get('elcodi.repository.order_coupon')
         );
     }
 }
