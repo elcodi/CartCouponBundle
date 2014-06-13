@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @author ##author_placeholder
+ * @author  ##author_placeholder
  * @version ##version_placeholder##
  */
 
@@ -17,9 +17,9 @@ namespace Elcodi\CartCouponBundle\Event;
 use Elcodi\CartCouponBundle\Event\Abstracts\AbstractCartCouponEvent;
 
 /**
- * CouponRemovedFromCart Event
+ * Class CartCouponOnApplyEvent
  */
-class CouponCartPostRemoveEvent extends AbstractCartCouponEvent
+class CartCouponOnApplyEvent extends AbstractCartCouponEvent
 {
 
 }
