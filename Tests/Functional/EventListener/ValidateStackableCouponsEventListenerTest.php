@@ -17,45 +17,25 @@
 
 namespace Elcodi\Bundle\CartCouponBundle\Tests\Functional\EventListener;
 
-use Elcodi\Bundle\TestCommonBundle\Functional\WebTestCase;
+use Elcodi\Bundle\CartCouponBundle\Tests\Functional\EventListener\Abstracts\AbstractCartCouponEventListenerTest;
 use Elcodi\Component\Cart\Entity\Interfaces\CartInterface;
 use Elcodi\Component\CartCoupon\Exception\CouponNotStackableException;
 
 /**
- * Class StackableCouponEventListenerTest
+ * Class ValidateStackableCouponsEventListenerTest
  */
-class StackableCouponEventListenerTest extends WebTestCase
+class ValidateStackableCouponsEventListenerTest extends AbstractCartCouponEventListenerTest
 {
-    /**
-     * Load fixtures of these bundles
-     *
-     * @return array Bundles name where fixtures should be found
-     */
-    protected static function loadFixturesBundles()
-    {
-        return [
-            'ElcodiCartBundle',
-            'ElcodiCouponBundle',
-        ];
-    }
-
     /**
      * Test cart with stackable coupon and all stacked coupons are stackable
      *
-     * @covers       checkStackableCoupon
-     *
-     * @dataProvider dataCheckStackableCoupon
+     * @dataProvider dataValidateStackableCoupon
      */
-    public function testCheckStackableCoupon(
+    public function testValidateStackableCoupon(
         $couponIds,
         $expectsException
     ) {
-        $this->reloadScenario();
-
-        $cart = $this->find('cart', 2);
-        $this
-            ->get('elcodi.event_dispatcher.cart')
-            ->dispatchCartLoadEvents($cart);
+        $cart = $this->getLoadedCart(2);
 
         try {
             $this
@@ -68,12 +48,20 @@ class StackableCouponEventListenerTest extends WebTestCase
                 throw $exception;
             }
         }
+
+        /**
+         * Clean operations to avoid restart scenario
+         */
+        $this->removeCouponsToCartByCouponIds(
+            $cart,
+            $couponIds
+        );
     }
 
     /**
-     * Data for testCheckStackableCoupon
+     * Data for testValidateStackableCoupon
      */
-    public function dataCheckStackableCoupon()
+    public function dataValidateStackableCoupon()
     {
         return [
 
@@ -95,7 +83,7 @@ class StackableCouponEventListenerTest extends WebTestCase
     }
 
     /**
-     * Private geta CartCoupon array given stackable information
+     * Add a set of coupons into a cart given their ids
      */
     private function addCouponsToCartByCouponIds(
         CartInterface $cart,
@@ -107,6 +95,24 @@ class StackableCouponEventListenerTest extends WebTestCase
             $coupon->setEnabled(true);
             $cartCouponManager
                 ->addCoupon(
+                    $cart,
+                    $coupon
+                );
+        }
+    }
+
+    /**
+     * Remove a set of coupons from a cart given their ids
+     */
+    private function removeCouponsToCartByCouponIds(
+        CartInterface $cart,
+        array $couponIds
+    ) {
+        $cartCouponManager = $this->get('elcodi.manager.cart_coupon');
+        foreach ($couponIds as $couponId) {
+            $coupon = $this->find('coupon', $couponId);
+            $cartCouponManager
+                ->removeCoupon(
                     $cart,
                     $coupon
                 );
